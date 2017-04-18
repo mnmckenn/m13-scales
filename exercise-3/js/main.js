@@ -102,10 +102,10 @@ $(function () {
             yAxis.scale(yScale);
 
             // Render (call) your xAxis in your xAxisLabel
-            xAxisLabel.transition().duration(500).call(xAxis);
+            xAxisLabel.transition().duration(1000).call(xAxis);
 
             // Render (call) your yAxis in your yAxisLabel
-            yAxisLabel.transition().duration(500).call(yAxis);
+            yAxisLabel.transition().duration(1000).call(yAxis);
 
             // Update xAxisText and yAxisText labels
             xAxisText.text('State');
@@ -120,8 +120,13 @@ $(function () {
         g.call(tip);
 
         var draw = function (data) {
-
+            var getRandomInt = function () {
+                min = Math.ceil(0);
+                max = Math.floor(255);
+                return Math.floor(Math.random() * (max - min)) + min;
+            };
             setScales(data);
+
             setAxis();
 
             // Store the data-join in a function: make sure to set the scales and update the axes in your function.
@@ -139,7 +144,9 @@ $(function () {
                 .attr('width', xScale.bandwidth())
                 .merge(bars)
                 .transition()
-                .duration(1000)
+                .duration(function (d, i) {
+                    return i / 2 * 50;
+                })
                 .delay(function (d, i) {
                     return i * 50;
                 })
@@ -148,6 +155,8 @@ $(function () {
                 })
                 .attr('height', function (d) {
                     return drawHeight - yScale(d.percent);
+                }).style('fill', function () {
+                    return "rgb(" + getRandomInt() + "," + getRandomInt() + "," + getRandomInt() + ")";
                 });
 
             bars.exit().remove();
